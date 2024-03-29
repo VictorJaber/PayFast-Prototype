@@ -1,32 +1,55 @@
 import React, { useState } from 'react';
 import { View, StyleSheet } from 'react-native';
-import { StatusBar } from 'expo-status-bar';
-import Header from './src/components/Header';
+import { Feather } from '@expo/vector-icons';
+import {NavigationContainer} from '@react-navigation/native'
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import Buy from './src/pages/buy/Index';
+import Cart from './src/pages/cart/Index';
+import Account from './src/pages/my-account/Index';
+import Orders from './src/pages/orders/Index';
+import CustomTabBar from './src/customBarTab';
+import Home from './src/pages/Home/home';
+import { AntDesign } from '@expo/vector-icons';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
-// const fetchFonts = () => {
-//   return Font.loadAsync({
-//     'Montserrat': require('./assets/fonts/Montserrat/static/Montserrat-Regular.ttf'),
-//     'Montserrat-Bold': require('./assets/fonts/Montserrat/static/Montserrat-Bold.ttf'),
-//   });
-// };
+const Tab = createBottomTabNavigator();
 
-export default function App() {
-
+const App = () => {
   return (
-    <View style={styles.container}>
-      <Header />
-      <StatusBar style="auto" />
-    </View>
+    <SafeAreaView style={styles.container}>
+    <NavigationContainer>
+      <Tab.Navigator tabBar={props => <CustomTabBar {...props} />}>
+        <Tab.Screen
+          name="Home"
+          component={Home}
+          options={{ tabBarIcon: 'home-outline' }}
+        />
+        <Tab.Screen
+          name="Buy"
+          component={Buy}
+          options={{ tabBarIcon: 'cart-outline' }}
+        />
+        <Tab.Screen
+          name="Account"
+          component={Account}
+          options={{ tabBarIcon: 'person-outline' }}
+        />
+        <Tab.Screen
+          name="Orders"
+          component={Orders}
+          options={{ tabBarIcon: 'receipt-outline' }}
+        />        
+      </Tab.Navigator>
+    </NavigationContainer>
+    </SafeAreaView>
   );
-}
+};
+
+export default App;
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
+    flex: 1, 
     justifyContent: 'center',
-    margin: 0,
-    padding: 0,
-  },
-});
+  }
+})
