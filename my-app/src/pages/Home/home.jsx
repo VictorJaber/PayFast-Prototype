@@ -40,7 +40,6 @@ const Home = () => {
 
   return (
     <ScrollView style={styles.body}>
-      <StatusBar/>
       <View style={styles.header}>
         <View style={[styles.row, { marginBottom: 10 }]}>
           <Text style={styles.title}>Av. Das Américas - Barra da Tijuca </Text>
@@ -56,40 +55,34 @@ const Home = () => {
         }}/>
         <Image source={require('../../../assets/banner3.png')} style={styles.mockimageTwo} />
         <Button
-          title={"Selecione seu mercado"}
+          title={"Select your market"}
           icon={require('../../../assets/cart.png')}
         />
         <View style={{
           marginTop: 10
         }}/>
         <Button
-          title={"Pedidos e cupons fiscais"}
+          title={"Orders and Fiscal Coupons"}
           icon={require("../../../assets/nfs.png")}
         />
         <View style={{
           marginTop: 10
         }}/>
         <Button
-          title={"Cupons"}
+          title={"Coupons and Discounts"}
           icon={require("../../../assets/cupons.png")}
-
         />
         <View style={{
           marginTop: 10
         }}/>
         <Button
-          title={"Favoritos"}
+          title={"Favorites"}
           icon={require("../../../assets/favoritos.png")}
 
         />
         <View style={{
           marginTop: 10
         }}/>
-        <Button
-          title={"Configurações"}
-          icon={require("../../../assets/configuracoes.png")}
-
-        />
         <View style={{
           height: 40
         }}/>

@@ -1,6 +1,5 @@
-// CustomTabBar.js
 import React, { useRef } from 'react';
-import { View, TouchableOpacity, Text, Animated } from 'react-native';
+import { View, TouchableOpacity, Text, Animated, StyleSheet, StatusBar} from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { Ionicons } from '@expo/vector-icons';
 
@@ -22,17 +21,16 @@ const CustomTabBar = ({ state, descriptors, navigation }) => {
   });
 
   return (
-      <View style={{ flexDirection: 'row', backgroundColor: '#FF8B01', height: 80 }}>
+    <View style={{ flexDirection: 'row', backgroundColor: '#FF6B00', height: 80 }}>
+<StatusBar backgroundColor="#FF6B00" barStyle="light-content" translucent={false} />
       {state.routes.map((route, index) => {
         const { options } = descriptors[route.key];
-
         const label =
           options.tabBarLabel !== undefined
             ? options.tabBarLabel
             : options.title !== undefined
             ? options.title
             : route.name;
-
         const isFocused = state.index === index;
 
         const onPress = () => {
@@ -54,28 +52,33 @@ const CustomTabBar = ({ state, descriptors, navigation }) => {
           });
         };
 
+        // Estilos específicos para o elemento "Scan"
+        const isScanTab = label === "Scan";
+        const tabStyle = isScanTab ? styles.scanTab : null;
+        const textStyle = isScanTab ? styles.scanText : null;
+        const iconColor = isScanTab ? (isFocused ? 'black' : 'black') : (isFocused ? 'black' : 'white');
+
         return (
           <TouchableOpacity
             accessibilityRole="button"
             accessibilityState={isFocused ? { selected: true } : {}}
-            accessibilityLabel={options.tabBarAccessibilityLabel}
-            testID={options.tabBarTestID}
             onPress={onPress}
             onLongPress={onLongPress}
-            style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}
+            style={[{ flex: 1, alignItems: 'center', justifyContent: 'center' }, tabStyle]}
             key={route.name}
           >
+            {/* Adicionando o círculo branco apenas para o elemento "Scan" */}
+            {isScanTab && <View style={styles.circle} />}
             <Ionicons
               name={options.tabBarIcon}
               size={24}
-              color={isFocused ? 'black' : 'white'}
+              color={iconColor} // Aplicando a cor do ícone
             />
-            <Text style={{ color: isFocused ? 'black' : 'white' }}>
-              {label}
-            </Text>
+            {isScanTab && <Text style={[{ color: 'white' }, textStyle]}>{label}</Text>}
           </TouchableOpacity>
         );
       })}
+      {/* Adicionando a linha animada */}
       <Animated.View
         style={{
           position: 'absolute',
@@ -89,5 +92,17 @@ const CustomTabBar = ({ state, descriptors, navigation }) => {
     </View>
   );
 };
+
+const styles = StyleSheet.create({
+  scanTab: {
+    // Estilos específicos para o elemento "Scan"
+    backgroundColor: 'white', // Fundo branco
+  },
+  scanText: {
+    // Estilos específicos para o texto do elemento "Scan"
+    fontWeight: 'bold', // Exemplo de texto em negrito
+    color: 'black',
+  },
+});
 
 export default CustomTabBar;
