@@ -2,8 +2,11 @@ import React, { useState, useEffect } from "react";
 import { View, Text, StyleSheet, Platform, TouchableOpacity} from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { Camera } from 'expo-camera';
+import { useNavigation } from '@react-navigation/native';
+
 
 export default function Scan() {
+    const navigation = useNavigation();
     const [type, setType] = useState(Camera.Constants.Type.back);
     const [hasPermission, setHasPermission] = useState(null);
 
@@ -17,7 +20,14 @@ export default function Scan() {
                 setHasPermission(status === 'granted');
             }
         })();
-    }, []);
+
+        const timer = setTimeout(() => {
+            navigation.navigate('PageProduct'); // Certifique-se de que 'PageProduct' é o nome correto da rota
+        }, 5000);
+
+        // Limpeza do timer quando o componente for desmontado
+        return () => clearTimeout(timer);
+    }, [navigation]);
 
     if (hasPermission === null) {
         return <Text>Verificando permissões da câmera...</Text>;

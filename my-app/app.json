@@ -1,6 +1,6 @@
 {
   "expo": {
-    "name": "my-app",
+    "name": "PayFast",
     "slug": "my-app",
     "version": "1.0.0",
     "orientation": "portrait",
@@ -15,7 +15,8 @@
       "assets/fonts/*"
     ],
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "com.payfast.dev"
     },
     "android": {
       "adaptiveIcon": {
@@ -28,6 +29,11 @@
     },
     "plugins": [
       "expo-font"
-    ]
+    ],
+    "extra": {
+      "eas": {
+        "projectId": "039fc21d-9fd3-4ac4-a080-0877b051fda3"
+      }
+    }
   }
 }

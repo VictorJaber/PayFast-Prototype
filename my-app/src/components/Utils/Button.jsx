@@ -1,14 +1,12 @@
 import React from 'react';
-import { View, Image, Text, StyleSheet, Pressable } from 'react-native';
+import { View, Text, StyleSheet, Pressable } from 'react-native';
+import { MaterialIcons } from '@expo/vector-icons'; 
 
-export default function Button(props) {
-  const { onPress, title = 'Save', icon = require("../../../assets/cart.png") } = props;
+export default function Button({ onPress, title = 'Save', iconName = 'shopping-cart' }) {
   return (
     <Pressable style={styles.button} onPress={onPress}>
-      <Image source={icon} />
-      <View style={{
-        marginLeft: 10
-      }}/>
+      <MaterialIcons name={iconName} size={24} color="white" style={styles.icon} />
+      <View style={{ marginLeft: 10 }}/>
       <Text style={styles.text}>{title}</Text>
     </Pressable>
   );
@@ -16,11 +14,10 @@ export default function Button(props) {
 
 const styles = StyleSheet.create({
   button: {
-    display: 'flex',
     flexDirection: 'row',
-    width: '90.5%',
     alignItems: 'center',
-    justifyContent: 'left',
+    justifyContent: 'flex-start', // Corrigido para 'flex-start' para alinhar ao início
+    width: '90.5%',
     paddingVertical: 12,
     paddingHorizontal: 32,
     borderRadius: 6,
@@ -34,4 +31,7 @@ const styles = StyleSheet.create({
     letterSpacing: 0.25,
     color: 'white',
   },
+  icon: {
+    // Personalize se necessário
+  }
 });

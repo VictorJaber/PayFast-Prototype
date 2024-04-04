@@ -1,38 +1,40 @@
 import React, { useState } from "react";
-import { View, Text, StyleSheet, FlatList, Image, TextInput, TouchableOpacity } from "react-native";
+import { View, Text, StyleSheet, FlatList, Image, TextInput, TouchableOpacity, TouchableWithoutFeedback, Keyboard } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
+import { useNavigation } from '@react-navigation/native';
 
 export default function Cart() {
+    const navigation = useNavigation();
     const [cupom, setCupom] = useState('');
+    const [showText, setShowText] = useState(false);
     const [cartItems, setCartItems] = useState([
         {
             id: '001',
-            desc: ['Arroz / 10KG', '30,00'],
+            desc: ['Nutella / 500G', ' 12,00'],
             quantidade: 1,
-            imagem: require('../../../assets/product1.png')
+            imagem: require('../../../assets/1.png')
         },
         {
             id: '002',
-            desc: ['Feijão Preto / 1KG', '18,00'],
+            desc: ['Milk Italac / 1L', ' 2,60'],
             quantidade: 2,
-            imagem: require('../../../assets/product2.png')
+            imagem: require('../../../assets/2.png')
         },
         {
             id: '003',
-            desc: ['Picanha Bovina Black / 1KG', '78,00'],
+            desc: ['Coffee Expresso / 1KG', ' 6,70'],
             quantidade: 1,
-            imagem: require('../../../assets/product3.png')
+            imagem: require('../../../assets/3.png')
         },
         {
             id: '004',
-            desc: ['Cerveja Brahma / 1L', '13,00'],
+            desc: ['Rice Tio João / 1KG', ' 8,00'],
             quantidade: 3,
-            imagem: require('../../../assets/product4.png')
+            imagem: require('../../../assets/4.png')
         }
     ]);
 
     const aplicarCupom = () => {
-        // Lógica para aplicar o cupom
         console.log('Cupom aplicado:', cupom);
     };
 
@@ -61,7 +63,7 @@ export default function Cart() {
             <Image source={item.imagem} style={styles.imagemProduto} />
             <View style={{ flex: 1 }}>
                 <Text style={styles.textoDescricao}>{item.desc[0]}</Text>
-                <Text style={styles.textoPreco}>R${item.desc[1]}</Text>
+                <Text style={styles.textoPreco}>CHF{item.desc[1]}</Text>
                 <View style={{ flexDirection: 'row', alignItems: 'center', marginTop: 5 }}>
                     <TouchableOpacity onPress={() => decrementQuantity(index)}>
                         <Ionicons name="remove-circle" size={24} color="#FF6B00" />
@@ -80,42 +82,57 @@ export default function Cart() {
 
     const totalItems = cartItems.reduce((total, item) => total + item.quantidade, 0);
     const subtotal = cartItems.reduce((total, item) => total + item.quantidade * parseFloat(item.desc[1]), 0);
-    const desconto = 0; // Mocked value for discount
+    const desconto = 0;
     const total = subtotal - desconto;
 
+    const handlePress = () => {
+        navigation.navigate('Payment'); // Navegue para a tela de pagamento ao pressionar o botão
+    };
+
     return (
-        <View style={styles.container}>
-            <FlatList
-                data={cartItems}
-                keyExtractor={item => item.id}
-                renderItem={renderItem}
-            />
-            <View style={styles.cupomContainer}>
-                <TextInput
-                    style={styles.inputCupom}
-                    placeholder="Digite seu cupom"
-                    value={cupom}
-                    onChangeText={setCupom}
-                />
-                <TouchableOpacity style={styles.botaoAplicar} onPress={aplicarCupom}>
-                    <Text style={styles.textoBotao}>Aplicar</Text>
-                </TouchableOpacity>
+        <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+            <View style={styles.container}>
+                {!showText ? (
+                    <View>
+                        <FlatList
+                            data={cartItems}
+                            keyExtractor={item => item.id}
+                            renderItem={renderItem}
+                        />
+                        <View style={styles.cupomContainer}>
+                            <TextInput
+                                style={styles.inputCupom}
+                                placeholder="Digite seu cupom"
+                                value={cupom}
+                                onChangeText={setCupom}
+                            />
+                            <TouchableOpacity style={styles.botaoAplicar} onPress={aplicarCupom}>
+                                <Text style={styles.textoBotao}>Aplicar</Text>
+                            </TouchableOpacity>
+                        </View>
+                        <View style={styles.resumoContainer}>
+                            <Text style={styles.resumoText}>Subtotal ({totalItems} itens): R${subtotal.toFixed(2)}</Text>
+                            <Text style={styles.resumoText}>Desconto: R${desconto.toFixed(2)}</Text>
+                            <Text style={[styles.resumoText, styles.totalText]}>Total a pagar: R${total.toFixed(2)}</Text>
+                        </View>
+                        <TouchableOpacity style={styles.botaoProsseguir} onPress={handlePress}>
+                            <Text style={styles.textoBotao}>Prosseguir para a compra</Text>
+                        </TouchableOpacity>
+                    </View>
+                ) : (
+                    <View style={styles.container}>
+                        <Text style={styles.texto}>Função Payment executada com sucesso!</Text>
+                    </View>
+                )}
             </View>
-            <View style={styles.resumoContainer}>
-                <Text style={styles.resumoText}>Subtotal ({totalItems} itens): R${subtotal.toFixed(2)}</Text>
-                <Text style={styles.resumoText}>Desconto: R${desconto.toFixed(2)}</Text>
-                <Text style={[styles.resumoText, styles.totalText]}>Total a pagar: R${total.toFixed(2)}</Text>
-            </View>
-            <TouchableOpacity style={styles.botaoProsseguir}>
-                <Text style={styles.textoBotao}>Prosseguir para a compra</Text>
-            </TouchableOpacity>
-        </View>
+        </TouchableWithoutFeedback>
     );
 }
 
 const styles = StyleSheet.create({
     container: {
         flex: 1,
+        backgroundColor: 'white',
     },
     cupomContainer: {
         flexDirection: 'row',
@@ -183,5 +200,10 @@ const styles = StyleSheet.create({
         paddingHorizontal: 20,
         alignSelf: 'center',
         marginBottom: 20
+    },
+    texto: {
+        fontSize: 20,
+        textAlign: 'center',
+        marginTop: 20
     }
 });
